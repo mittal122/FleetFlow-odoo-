@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import client from "../api/client";
 import Loading from "../components/Loading";
+import Chatbot from "../components/Chatbot";
 
 export default function Maintenance() {
   const [form, setForm] = useState({ vehicleId: "", cost: "" });
@@ -60,11 +61,11 @@ export default function Maintenance() {
   };
 
   return (
-    <div>
+    <div className="page">
       <h1>Maintenance Panel</h1>
 
       {message && (
-        <div className={`card ${message.startsWith("Error") ? "alert" : "success"}`}>
+        <div className="card" style={{ borderColor: message.startsWith("Error") ? "var(--danger)" : "var(--success)", color: message.startsWith("Error") ? "var(--danger)" : "var(--success)" }}>
           {message}
         </div>
       )}
@@ -137,6 +138,7 @@ export default function Maintenance() {
           <p style={{ textAlign: "center", opacity: 0.5 }}>No maintenance logs yet.</p>
         )}
       </div>
+      <Chatbot />
     </div>
   );
 }

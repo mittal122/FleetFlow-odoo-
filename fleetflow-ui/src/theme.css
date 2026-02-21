@@ -1,0 +1,152 @@
+/* ========== FLEETFLOW PURPLE THEME ========== */
+
+:root {
+  --bg: #0b0a10;
+  --panel: #14121a;
+  --card: #1a1724;
+  --border: #26233a;
+
+  --primary: #7c3aed;
+  --primary-light: #a78bfa;
+
+  --text: #f5f3ff;
+  --muted: #b5b2c8;
+
+  --success: #22c55e;
+  --warn: #f59e0b;
+  --danger: #ef4444;
+}
+
+/* Reset */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+}
+
+/* Typography */
+h1 {
+  font-size: 26px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+h2 {
+  font-size: 20px;
+  font-weight: 500;
+}
+
+p {
+  color: var(--muted);
+}
+
+/* Layout */
+.page {
+  padding: 28px;
+  max-width: 1200px;
+  margin: auto;
+}
+
+/* Cards */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 20px;
+  transition: 0.15s ease;
+}
+
+.card:hover {
+  border-color: var(--primary);
+}
+
+/* Inputs */
+input, select {
+  width: 100%;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 10px;
+  margin-top: 6px;
+  margin-bottom: 14px;
+  border-radius: 6px;
+}
+
+input:focus, select:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+/* Buttons */
+button {
+  background: var(--primary);
+  border: none;
+  color: white;
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+button:hover {
+  background: var(--primary-light);
+}
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th {
+  text-align: left;
+  color: var(--muted);
+  font-weight: 500;
+  padding-bottom: 10px;
+}
+
+td {
+  padding: 12px 0;
+  border-top: 1px solid var(--border);
+}
+
+/* Status Badge */
+.badge {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+}
+
+.badge.available { background: #2e1065; color: #c4b5fd; }
+.badge.trip { background: #4c1d95; color: #ddd6fe; }
+.badge.shop { background: #78350f; color: #fde68a; }
+.badge.retired { background: #374151; color: #d1d5db; }
+
+/* Sidebar */
+.sidebar {
+  width: 220px;
+  background: #07060c;
+  border-right: 1px solid var(--border);
+  padding: 24px;
+}
+
+.sidebar h2 {
+  margin-bottom: 30px;
+}
+
+.sidebar a {
+  display: block;
+  color: var(--muted);
+  text-decoration: none;
+  margin-bottom: 14px;
+}
+
+.sidebar a:hover {
+  color: var(--primary-light);
+}

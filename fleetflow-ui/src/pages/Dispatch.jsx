@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import client from "../api/client";
+import Chatbot from "../components/Chatbot";
 
 export default function Dispatch() {
   const [vehicles, setVehicles] = useState([]);
@@ -54,11 +55,11 @@ export default function Dispatch() {
   };
 
   return (
-    <div>
+    <div className="page">
       <h1>Trip Dispatcher</h1>
 
       {message && (
-        <div className={`card ${message.startsWith("Error") ? "alert" : "success"}`}>
+        <div className="card" style={{ borderColor: message.startsWith("Error") ? "var(--danger)" : "var(--success)", color: message.startsWith("Error") ? "var(--danger)" : "var(--success)" }}>
           {message}
         </div>
       )}
@@ -148,6 +149,7 @@ export default function Dispatch() {
           <button onClick={completeTrip}>Complete Trip</button>
         </div>
       </div>
+      <Chatbot />
     </div>
   );
 }

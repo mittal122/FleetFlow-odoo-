@@ -6,53 +6,55 @@ const prisma = new PrismaClient();
 async function main() {
   console.log("🌱 Seeding FleetFlow database...");
 
-  // --- Users ---
-  const passwordHash = await bcrypt.hash("password123", 10);
+
+  // --- Users (Imadian style) ---
+  const passwordHash = await bcrypt.hash("imadian123", 10);
 
   const admin = await prisma.user.upsert({
-    where: { email: "admin@fleetflow.io" },
+    where: { email: "amir@imadia.io" },
     update: {},
     create: {
-      email: "admin@fleetflow.io",
+      email: "amir@imadia.io",
       password: passwordHash,
-      name: "Admin User",
+      name: "Amir Imadian",
       role: "ADMIN",
     },
   });
 
   const dispatcher = await prisma.user.upsert({
-    where: { email: "dispatch@fleetflow.io" },
+    where: { email: "safiya@imadia.io" },
     update: {},
     create: {
-      email: "dispatch@fleetflow.io",
+      email: "safiya@imadia.io",
       password: passwordHash,
-      name: "Jane Dispatcher",
+      name: "Safiya Imadian",
       role: "DISPATCHER",
     },
   });
 
   const viewer = await prisma.user.upsert({
-    where: { email: "viewer@fleetflow.io" },
+    where: { email: "zayd@imadia.io" },
     update: {},
     create: {
-      email: "viewer@fleetflow.io",
+      email: "zayd@imadia.io",
       password: passwordHash,
-      name: "Read Only",
+      name: "Zayd Imadian",
       role: "VIEWER",
     },
   });
 
   console.log(`  ✔ Users: ${admin.email}, ${dispatcher.email}, ${viewer.email}`);
 
-  // --- Vehicles ---
+
+  // --- Vehicles (Imadian style) ---
   const vehicles = await Promise.all(
     [
-      { name: "Truck Alpha", licensePlate: "FL-1001", maxCapacity: 5000, odometer: 12450 },
-      { name: "Truck Bravo", licensePlate: "FL-1002", maxCapacity: 8000, odometer: 34200 },
-      { name: "Van Charlie", licensePlate: "FL-2001", maxCapacity: 1500, odometer: 8700 },
-      { name: "Truck Delta", licensePlate: "FL-1003", maxCapacity: 10000, odometer: 56100 },
-      { name: "Van Echo", licensePlate: "FL-2002", maxCapacity: 2000, odometer: 4300 },
-      { name: "Truck Foxtrot", licensePlate: "FL-1004", maxCapacity: 6000, odometer: 22000 },
+      { name: "Imadian Falcon", licensePlate: "IM-1001", maxCapacity: 7000, odometer: 15000 },
+      { name: "Imadian Eagle", licensePlate: "IM-1002", maxCapacity: 9000, odometer: 32000 },
+      { name: "Imadian Sparrow", licensePlate: "IM-2001", maxCapacity: 2000, odometer: 9500 },
+      { name: "Imadian Hawk", licensePlate: "IM-1003", maxCapacity: 12000, odometer: 60000 },
+      { name: "Imadian Dove", licensePlate: "IM-2002", maxCapacity: 2500, odometer: 5000 },
+      { name: "Imadian Owl", licensePlate: "IM-1004", maxCapacity: 8000, odometer: 25000 },
     ].map((v) =>
       prisma.vehicle.upsert({
         where: { licensePlate: v.licensePlate },
@@ -64,14 +66,15 @@ async function main() {
 
   console.log(`  ✔ Vehicles: ${vehicles.length} seeded`);
 
-  // --- Drivers ---
+
+  // --- Drivers (Imadian style) ---
   const drivers = [];
   const driverData = [
-    { name: "Carlos Mendez", licenseExpiry: new Date("2026-03-15") },
-    { name: "Aisha Patel", licenseExpiry: new Date("2025-11-30") },
-    { name: "Tom Kowalski", licenseExpiry: new Date("2026-08-01") },
-    { name: "Lena Yamamoto", licenseExpiry: new Date("2025-06-20") },
-    { name: "James O'Brien", licenseExpiry: new Date("2027-01-10") },
+    { name: "Imad ibn Khalid", licenseExpiry: new Date("2026-04-15") },
+    { name: "Layla bint Imad", licenseExpiry: new Date("2025-12-30") },
+    { name: "Samir ibn Zayd", licenseExpiry: new Date("2026-09-01") },
+    { name: "Fatima bint Amir", licenseExpiry: new Date("2025-07-20") },
+    { name: "Yusuf ibn Safiya", licenseExpiry: new Date("2027-02-10") },
   ];
 
   for (const d of driverData) {
@@ -85,14 +88,15 @@ async function main() {
 
   console.log(`  ✔ Drivers: ${drivers.length} seeded`);
 
-  // --- Completed Trips (for analytics) ---
+
+  // --- Completed Trips (Imadian style) ---
   const tripData = [
-    { vehicleId: vehicles[0].id, driverId: drivers[0].id, cargoWeight: 3200, startOdo: 12000, endOdo: 12450, status: "COMPLETED" },
-    { vehicleId: vehicles[1].id, driverId: drivers[1].id, cargoWeight: 6500, startOdo: 33500, endOdo: 34200, status: "COMPLETED" },
-    { vehicleId: vehicles[2].id, driverId: drivers[2].id, cargoWeight: 1100, startOdo: 8200, endOdo: 8700, status: "COMPLETED" },
-    { vehicleId: vehicles[3].id, driverId: drivers[3].id, cargoWeight: 9000, startOdo: 55000, endOdo: 56100, status: "COMPLETED" },
-    { vehicleId: vehicles[0].id, driverId: drivers[4].id, cargoWeight: 2800, startOdo: 12450, endOdo: 12900, status: "COMPLETED" },
-    { vehicleId: vehicles[1].id, driverId: drivers[0].id, cargoWeight: 7200, startOdo: 34200, endOdo: 34850, status: "COMPLETED" },
+    { vehicleId: vehicles[0].id, driverId: drivers[0].id, cargoWeight: 5000, startOdo: 14000, endOdo: 15000, status: "COMPLETED" },
+    { vehicleId: vehicles[1].id, driverId: drivers[1].id, cargoWeight: 8500, startOdo: 31000, endOdo: 32000, status: "COMPLETED" },
+    { vehicleId: vehicles[2].id, driverId: drivers[2].id, cargoWeight: 1800, startOdo: 9000, endOdo: 9500, status: "COMPLETED" },
+    { vehicleId: vehicles[3].id, driverId: drivers[3].id, cargoWeight: 11000, startOdo: 59000, endOdo: 60000, status: "COMPLETED" },
+    { vehicleId: vehicles[0].id, driverId: drivers[4].id, cargoWeight: 6000, startOdo: 15000, endOdo: 16000, status: "COMPLETED" },
+    { vehicleId: vehicles[1].id, driverId: drivers[0].id, cargoWeight: 9000, startOdo: 32000, endOdo: 33000, status: "COMPLETED" },
   ];
 
   let tripCount = 0;
@@ -103,16 +107,17 @@ async function main() {
 
   console.log(`  ✔ Trips: ${tripCount} completed trips seeded`);
 
-  // --- Expenses (fuel records for analytics) ---
+
+  // --- Expenses (Imadian style fuel records) ---
   const expenseData = [
-    { vehicleId: vehicles[0].id, fuelLiters: 60, cost: 120 },
-    { vehicleId: vehicles[0].id, fuelLiters: 55, cost: 110 },
-    { vehicleId: vehicles[1].id, fuelLiters: 90, cost: 180 },
-    { vehicleId: vehicles[1].id, fuelLiters: 85, cost: 170 },
-    { vehicleId: vehicles[2].id, fuelLiters: 35, cost: 70 },
-    { vehicleId: vehicles[3].id, fuelLiters: 120, cost: 240 },
-    { vehicleId: vehicles[4].id, fuelLiters: 40, cost: 80 },
-    { vehicleId: vehicles[5].id, fuelLiters: 70, cost: 140 },
+    { vehicleId: vehicles[0].id, fuelLiters: 70, cost: 140 },
+    { vehicleId: vehicles[0].id, fuelLiters: 65, cost: 130 },
+    { vehicleId: vehicles[1].id, fuelLiters: 100, cost: 200 },
+    { vehicleId: vehicles[1].id, fuelLiters: 95, cost: 190 },
+    { vehicleId: vehicles[2].id, fuelLiters: 45, cost: 90 },
+    { vehicleId: vehicles[3].id, fuelLiters: 130, cost: 260 },
+    { vehicleId: vehicles[4].id, fuelLiters: 50, cost: 100 },
+    { vehicleId: vehicles[5].id, fuelLiters: 80, cost: 160 },
   ];
 
   for (const e of expenseData) {
@@ -121,10 +126,11 @@ async function main() {
 
   console.log(`  ✔ Expenses: ${expenseData.length} fuel records seeded`);
 
-  // --- Maintenance records ---
+
+  // --- Maintenance records (Imadian style) ---
   const maintData = [
-    { vehicleId: vehicles[3].id, cost: 1500 },
-    { vehicleId: vehicles[5].id, cost: 800 },
+    { vehicleId: vehicles[3].id, cost: 1800 },
+    { vehicleId: vehicles[5].id, cost: 950 },
   ];
 
   for (const m of maintData) {
@@ -139,8 +145,8 @@ async function main() {
 
   console.log(`  ✔ Maintenance: ${maintData.length} records seeded`);
 
-  console.log("\n✅ Seed complete!");
-  console.log("   Login with: admin@fleetflow.io / password123");
+  console.log("\n✅ Imadian seed complete!");
+  console.log("   Login with: amir@imadia.io / imadian123");
 }
 
 main()

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import client from "../api/client";
 import Loading from "../components/Loading";
+import Chatbot from "../components/Chatbot";
 
 export default function Expenses() {
   const [form, setForm] = useState({ vehicleId: "", liters: "", cost: "" });
@@ -57,11 +58,11 @@ export default function Expenses() {
   };
 
   return (
-    <div>
+    <div className="page">
       <h1>Fuel & Expenses</h1>
 
       {message && (
-        <div className={`card ${message.startsWith("Error") ? "alert" : "success"}`}>
+        <div className="card" style={{ borderColor: message.startsWith("Error") ? "var(--danger)" : "var(--success)", color: message.startsWith("Error") ? "var(--danger)" : "var(--success)" }}>
           {message}
         </div>
       )}
@@ -141,6 +142,7 @@ export default function Expenses() {
           <p style={{ textAlign: "center", opacity: 0.5 }}>No expenses yet.</p>
         )}
       </div>
+      <Chatbot />
     </div>
   );
 }

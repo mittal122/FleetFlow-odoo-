@@ -3,6 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 
 import authRoutes from "./routes/auth.routes.js";
+import chatbotRoutes from "./routes/chatbot.routes.js";
 import dispatchRoutes from "./routes/dispatch.routes.js";
 import maintenanceRoutes from "./routes/maintenance.routes.js";
 import expenseRoutes from "./routes/expense.routes.js";
@@ -22,6 +23,7 @@ app.use(express.json());
 
 // Public routes (no auth required)
 app.use("/api/auth", authRoutes);
+app.use("/api/chatbot", chatbotRoutes);
 
 // Protected routes (require JWT)
 app.use("/api/trips", authenticate, dispatchRoutes);

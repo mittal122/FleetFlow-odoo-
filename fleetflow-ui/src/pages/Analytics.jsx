@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import client from "../api/client";
 import Loading from "../components/Loading";
+import Chatbot from "../components/Chatbot";
 import {
   BarChart,
   Bar,
@@ -75,10 +76,13 @@ export default function Analytics() {
   }));
 
   return (
-    <div>
+    <div className="page">
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <h1>Operational Analytics</h1>
-        <button onClick={downloadCSV}>Export CSV</button>
+        <div>
+          <button onClick={downloadCSV} style={{ marginRight: 8 }}>Export CSV</button>
+          <button onClick={() => window.open("/analytics/export/pdf", "_blank")}>Export PDF</button>
+        </div>
       </div>
 
       {/* Charts row */}
@@ -153,6 +157,7 @@ export default function Analytics() {
               <th>Total Cost (₹)</th>
               <th>KM Driven</th>
               <th>Efficiency (km/L)</th>
+              <th>ROI</th>
             </tr>
           </thead>
           <tbody>
@@ -160,10 +165,11 @@ export default function Analytics() {
               <tr key={i}>
                 <td>{row.vehicle}</td>
                 <td>{row.licensePlate}</td>
-                <td>{row.status}</td>
+                <td><span className="badge" style={{ background: "#4c1d95", color: "#fff" }}>{row.status}</span></td>
                 <td>₹ {row.totalCost.toLocaleString()}</td>
                 <td>{row.kmDriven}</td>
                 <td>{row.efficiency}</td>
+                <td>{row.roi}</td>
               </tr>
             ))}
           </tbody>
@@ -174,6 +180,7 @@ export default function Analytics() {
           </p>
         )}
       </div>
+      <Chatbot />
     </div>
   );
 }

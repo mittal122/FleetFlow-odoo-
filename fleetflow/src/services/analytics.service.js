@@ -27,13 +27,19 @@ export const getFleetAnalytics = async () => {
 
     const fuelUsed = fuel._sum.fuelLiters || 0;
 
+    const totalCost = (fuel._sum.cost || 0) + (maintenance._sum.cost || 0);
+    const revenue = distance * (v.revenueRate || 0);
+    const roi = v.acquisitionCost
+      ? ((revenue - totalCost) / v.acquisitionCost).toFixed(2)
+      : 0;
     report.push({
       vehicle: v.name,
       licensePlate: v.licensePlate,
       status: v.status,
-      totalCost: (fuel._sum.cost || 0) + (maintenance._sum.cost || 0),
+      totalCost,
       kmDriven: distance,
       efficiency: fuelUsed === 0 ? 0 : (distance / fuelUsed).toFixed(2),
+      roi,
     });
   }
 

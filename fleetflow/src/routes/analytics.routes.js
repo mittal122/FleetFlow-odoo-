@@ -1,8 +1,14 @@
+
 import express from "express";
 import { getFleetAnalytics } from "../services/analytics.service.js";
 import { Parser } from "json2csv";
+import { generateReport } from "../services/report.service.js";
 
 const router = express.Router();
+
+router.get("/export/pdf", async (req, res) => {
+  await generateReport(res);
+});
 
 router.get("/fleet", async (req, res) => {
   const data = await getFleetAnalytics();

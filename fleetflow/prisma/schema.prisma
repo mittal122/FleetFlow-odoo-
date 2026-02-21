@@ -1,3 +1,8 @@
+model PasswordReset {
+  id        String   @id @default(uuid())
+  email     String
+  expiresAt DateTime
+}
 // FleetFlow Prisma Schema
 // Modular Fleet & Logistics Management System
 
@@ -18,6 +23,10 @@ model Vehicle {
   odometer     Float           @default(0)
   status       VehicleStatus   @default(AVAILABLE)
   createdAt    DateTime        @default(now())
+  type         String?
+  region       String?
+  acquisitionCost Float?
+  revenueRate     Float?
   trips        Trip[]
   expenses     Expense[]
   maintenance  Maintenance[]
