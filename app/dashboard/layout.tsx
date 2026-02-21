@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
-import { Users, Truck, Navigation, Wrench, BarChart3, Settings, LogOut } from 'lucide-react';
+import { Users, Truck, Navigation, Wrench, BarChart3, Settings, LogOut, Receipt, TrendingUp, PieChart } from 'lucide-react';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -57,11 +57,14 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   }
 
   const navItems = [
-    { href: '/dashboard', label: 'Overview', icon: BarChart3, roles: ['admin', 'dispatcher', 'driver', 'mechanic', 'accountant', 'viewer'] },
-    { href: '/dashboard/users', label: 'Users', icon: Users, roles: ['admin'] },
-    { href: '/dashboard/vehicles', label: 'Vehicles', icon: Truck, roles: ['admin', 'dispatcher', 'driver'] },
-    { href: '/dashboard/trips', label: 'Trips', icon: Navigation, roles: ['admin', 'dispatcher', 'driver'] },
+    { href: '/dashboard', label: 'Dashboard', icon: BarChart3, roles: ['admin', 'dispatcher', 'driver', 'mechanic', 'accountant', 'viewer'] },
+    { href: '/dashboard/vehicles', label: 'Vehicle Registry', icon: Truck, roles: ['admin', 'dispatcher', 'driver'] },
+    { href: '/dashboard/trips', label: 'Trip Dispatcher', icon: Navigation, roles: ['admin', 'dispatcher', 'driver'] },
     { href: '/dashboard/maintenance', label: 'Maintenance', icon: Wrench, roles: ['admin', 'mechanic', 'dispatcher'] },
+    { href: '/dashboard/trip-expense', label: 'Trip & Expense', icon: Receipt, roles: ['admin', 'accountant', 'dispatcher'] },
+    { href: '/dashboard/performance', label: 'Performance', icon: TrendingUp, roles: ['admin', 'dispatcher'] },
+    { href: '/dashboard/analytics', label: 'Analytics', icon: PieChart, roles: ['admin', 'dispatcher', 'viewer'] },
+    { href: '/dashboard/users', label: 'Users', icon: Users, roles: ['admin'] },
     { href: '/dashboard/audit-logs', label: 'Audit Logs', icon: Settings, roles: ['admin'] },
   ];
 

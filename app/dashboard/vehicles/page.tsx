@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Plus, Edit2, Trash2, Loader2 } from 'lucide-react';
+import { Plus, Trash2, Loader2, Search } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface Vehicle {
@@ -16,8 +16,10 @@ interface Vehicle {
   make: string;
   model: string;
   year: number;
+  vehicleType: string;
   status: string;
   mileage: number;
+  maxLoadCapacity: number;
 }
 
 export default function VehiclesPage() {
@@ -26,13 +28,20 @@ export default function VehiclesPage() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [saving, setSaving] = useState(false);
 
+  // Search + filters
+  const [search, setSearch] = useState('');
+  const [filterType, setFilterType] = useState('all');
+  const [filterStatus, setFilterStatus] = useState('all');
+
   // Form fields
   const [licensePlate, setLicensePlate] = useState('');
   const [make, setMake] = useState('');
   const [model, setModel] = useState('');
   const [year, setYear] = useState(new Date().getFullYear().toString());
+  const [vehicleType, setVehicleType] = useState('truck');
   const [status, setStatus] = useState('active');
   const [mileage, setMileage] = useState('0');
+  const [maxLoadCapacity, setMaxLoadCapacity] = useState('0');
 
   useEffect(() => {
     fetchVehicles();
@@ -40,7 +49,7 @@ export default function VehiclesPage() {
 
   async function fetchVehicles() {
     try {
-      const res = await fetch('/api/vehicles');
+      const res = await fetch('/api/vehicles?limit=200');
       if (res.ok) {
         const data = await res.json();
         setVehicles(data.data?.vehicles || []);
@@ -64,8 +73,10 @@ export default function VehiclesPage() {
           make,
           model,
           year: parseInt(year),
+          vehicleType,
           status,
           mileage: parseInt(mileage) || 0,
+          maxLoadCapacity: parseInt(maxLoadCapacity) || 0,
         }),
       });
       const data = await res.json();
@@ -104,42 +115,63 @@ export default function VehiclesPage() {
     setMake('');
     setModel('');
     setYear(new Date().getFullYear().toString());
+    setVehicleType('truck');
     setStatus('active');
     setMileage('0');
+    setMaxLoadCapacity('0');
+  }
+
+  // Client-side filtering + search
+  const filteredVehicles = vehicles.filter((v) => {
+    if (filterType !== 'all' && v.vehicleType !== filterType) return false;
+    if (filterStatus !== 'all' && v.status !== filterStatus) return false;
+    if (search) {
+      const q = search.toLowerCase();
+      if (
+        !v.licensePlate.toLowerCase().includes(q) &&
+        !v.make.toLowerCase().includes(q) &&
+        !v.model.toLowerCase().includes(q)
+      ) return false;
+    }
+    return true;
+  });
+
+  function formatType(t: string) {
+    return t ? t.charAt(0).toUpperCase() + t.slice(1) : '';
   }
 
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-start">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Fleet Management</h1>
-          <p className="text-gray-600 mt-2">Manage your vehicle fleet</p>
+          <h1 className="text-3xl font-bold text-gray-900">Vehicle Registry</h1>
+          <p className="text-gray-600 mt-2">View, add, or remove every vehicle your company owns</p>
         </div>
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger asChild>
             <Button className="gap-2 bg-blue-600 hover:bg-blue-700">
               <Plus className="w-4 h-4" />
-              Add Vehicle
+              + New Vehicle
             </Button>
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Add New Vehicle</DialogTitle>
-              <DialogDescription>Add a vehicle to your fleet.</DialogDescription>
+              <DialogTitle>New Vehicle Registration</DialogTitle>
+              <DialogDescription>Register a new vehicle to your fleet.</DialogDescription>
             </DialogHeader>
             <form onSubmit={handleCreate} className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="plate">License Plate</Label>
-                <Input id="plate" value={licensePlate} onChange={(e) => setLicensePlate(e.target.value)} placeholder="FLEET001" required />
+                <Input id="plate" value={licensePlate} onChange={(e) => setLicensePlate(e.target.value)} placeholder="MH 00 XX 0000" required />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="make">Make</Label>
-                  <Input id="make" value={make} onChange={(e) => setMake(e.target.value)} placeholder="Volvo" required />
+                  <Input id="make" value={make} onChange={(e) => setMake(e.target.value)} placeholder="Tata" required />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="model">Model</Label>
-                  <Input id="model" value={model} onChange={(e) => setModel(e.target.value)} placeholder="FH16" required />
+                  <Input id="model" value={model} onChange={(e) => setModel(e.target.value)} placeholder="Ace Gold" required />
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-4">
@@ -148,8 +180,29 @@ export default function VehiclesPage() {
                   <Input id="year" type="number" value={year} onChange={(e) => setYear(e.target.value)} required />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="mileage">Mileage (km)</Label>
-                  <Input id="mileage" type="number" value={mileage} onChange={(e) => setMileage(e.target.value)} />
+                  <Label>Type</Label>
+                  <Select value={vehicleType} onValueChange={setVehicleType}>
+                    <SelectTrigger className="w-full">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="truck">Truck</SelectItem>
+                      <SelectItem value="van">Van</SelectItem>
+                      <SelectItem value="car">Car</SelectItem>
+                      <SelectItem value="bus">Bus</SelectItem>
+                      <SelectItem value="trailer">Trailer</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="capacity">Max Payload</Label>
+                  <Input id="capacity" type="number" value={maxLoadCapacity} onChange={(e) => setMaxLoadCapacity(e.target.value)} placeholder="5000" />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="mileage">Initial Odometer</Label>
+                  <Input id="mileage" type="number" value={mileage} onChange={(e) => setMileage(e.target.value)} placeholder="74000" />
                 </div>
               </div>
               <div className="space-y-2">
@@ -168,7 +221,7 @@ export default function VehiclesPage() {
               <DialogFooter>
                 <Button type="button" variant="outline" onClick={() => setDialogOpen(false)}>Cancel</Button>
                 <Button type="submit" disabled={saving}>
-                  {saving ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Adding...</> : 'Add Vehicle'}
+                  {saving ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Saving...</> : 'Save'}
                 </Button>
               </DialogFooter>
             </form>
@@ -176,38 +229,95 @@ export default function VehiclesPage() {
         </Dialog>
       </div>
 
+      {/* Search + Filters */}
+      <div className="flex flex-wrap items-center gap-3">
+        <div className="relative flex-1 min-w-[200px] max-w-sm">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+          <Input
+            placeholder="Search by plate, make, model..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="pl-9"
+          />
+        </div>
+        <div className="flex items-center gap-2">
+          <Label className="text-sm text-gray-600 whitespace-nowrap">Type:</Label>
+          <Select value={filterType} onValueChange={setFilterType}>
+            <SelectTrigger className="w-[120px]">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All</SelectItem>
+              <SelectItem value="truck">Truck</SelectItem>
+              <SelectItem value="van">Van</SelectItem>
+              <SelectItem value="car">Car</SelectItem>
+              <SelectItem value="bus">Bus</SelectItem>
+              <SelectItem value="trailer">Trailer</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="flex items-center gap-2">
+          <Label className="text-sm text-gray-600 whitespace-nowrap">Status:</Label>
+          <Select value={filterStatus} onValueChange={setFilterStatus}>
+            <SelectTrigger className="w-[120px]">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All</SelectItem>
+              <SelectItem value="active">Active</SelectItem>
+              <SelectItem value="maintenance">In Shop</SelectItem>
+              <SelectItem value="retired">Idle</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
+
       <Card>
         <CardHeader>
-          <CardTitle>Vehicles</CardTitle>
-          <CardDescription>Total: {vehicles.length} vehicles</CardDescription>
+          <CardTitle>Fleet Vehicles</CardTitle>
+          <CardDescription>
+            Showing {filteredVehicles.length} of {vehicles.length} vehicles
+          </CardDescription>
         </CardHeader>
         <CardContent>
           {loading ? (
             <div className="flex justify-center py-8">
               <Loader2 className="h-8 w-8 animate-spin text-slate-400" />
             </div>
-          ) : vehicles.length === 0 ? (
-            <p className="text-center text-gray-500 py-8">No vehicles found. Click "Add Vehicle" to add your first vehicle.</p>
+          ) : filteredVehicles.length === 0 ? (
+            <p className="text-center text-gray-500 py-8">
+              {vehicles.length === 0
+                ? 'No vehicles found. Click "+ New Vehicle" to register your first vehicle.'
+                : 'No vehicles match the current filters.'}
+            </p>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead className="border-b border-gray-200">
                   <tr>
-                    <th className="text-left py-3 px-4 font-medium text-gray-700">License Plate</th>
-                    <th className="text-left py-3 px-4 font-medium text-gray-700">Make/Model</th>
-                    <th className="text-left py-3 px-4 font-medium text-gray-700">Year</th>
-                    <th className="text-left py-3 px-4 font-medium text-gray-700">Mileage</th>
+                    <th className="text-left py-3 px-4 font-medium text-gray-700">NO</th>
+                    <th className="text-left py-3 px-4 font-medium text-gray-700">Plate</th>
+                    <th className="text-left py-3 px-4 font-medium text-gray-700">Model</th>
+                    <th className="text-left py-3 px-4 font-medium text-gray-700">Type</th>
+                    <th className="text-left py-3 px-4 font-medium text-gray-700">Capacity</th>
+                    <th className="text-left py-3 px-4 font-medium text-gray-700">Odometer</th>
                     <th className="text-left py-3 px-4 font-medium text-gray-700">Status</th>
                     <th className="text-left py-3 px-4 font-medium text-gray-700">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {vehicles.map((vehicle) => (
+                  {filteredVehicles.map((vehicle, idx) => (
                     <tr key={vehicle._id} className="border-b border-gray-100 hover:bg-gray-50">
+                      <td className="py-3 px-4 text-gray-500">{idx + 1}</td>
                       <td className="py-3 px-4 text-gray-900 font-medium">{vehicle.licensePlate}</td>
-                      <td className="py-3 px-4 text-gray-600">{vehicle.make} {vehicle.model}</td>
-                      <td className="py-3 px-4 text-gray-600">{vehicle.year}</td>
-                      <td className="py-3 px-4 text-gray-600">{vehicle.mileage.toLocaleString()} km</td>
+                      <td className="py-3 px-4 text-gray-600">{vehicle.make} {vehicle.model} ({vehicle.year})</td>
+                      <td className="py-3 px-4">
+                        <span className="px-2 py-1 bg-slate-100 text-slate-700 rounded text-xs font-medium">
+                          {formatType(vehicle.vehicleType || 'truck')}
+                        </span>
+                      </td>
+                      <td className="py-3 px-4 text-gray-600">{(vehicle.maxLoadCapacity || 0).toLocaleString()} kg</td>
+                      <td className="py-3 px-4 text-gray-600">{(vehicle.mileage || 0).toLocaleString()} km</td>
                       <td className="py-3 px-4">
                         <span className={`px-2 py-1 rounded-full text-xs font-medium ${vehicle.status === 'active'
                             ? 'bg-green-100 text-green-700'
@@ -215,15 +325,13 @@ export default function VehiclesPage() {
                               ? 'bg-yellow-100 text-yellow-700'
                               : 'bg-gray-100 text-gray-700'
                           }`}>
-                          {vehicle.status}
+                          {vehicle.status === 'retired' ? 'Idle' : vehicle.status}
                         </span>
                       </td>
                       <td className="py-3 px-4">
-                        <div className="flex gap-2">
-                          <button className="p-1 text-red-600 hover:bg-red-50 rounded" onClick={() => handleDelete(vehicle._id, vehicle.licensePlate)} title="Delete">
-                            <Trash2 className="w-4 h-4" />
-                          </button>
-                        </div>
+                        <button className="p-1 text-red-600 hover:bg-red-50 rounded" onClick={() => handleDelete(vehicle._id, vehicle.licensePlate)} title="Delete">
+                          <Trash2 className="w-4 h-4" />
+                        </button>
                       </td>
                     </tr>
                   ))}

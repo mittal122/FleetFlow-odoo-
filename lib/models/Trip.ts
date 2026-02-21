@@ -7,6 +7,8 @@ export interface ITrip extends Document {
     origin: string;
     destination: string;
     distance?: number;
+    cargoWeight?: number;
+    estimatedFuelCost?: number;
     scheduledDate?: Date;
     status: 'scheduled' | 'in_progress' | 'completed' | 'cancelled';
     createdBy: mongoose.Types.ObjectId;
@@ -22,6 +24,8 @@ const tripSchema = new Schema<ITrip>(
         origin: { type: String, required: true, trim: true },
         destination: { type: String, required: true, trim: true },
         distance: { type: Number },
+        cargoWeight: { type: Number },
+        estimatedFuelCost: { type: Number },
         scheduledDate: { type: Date },
         status: {
             type: String,

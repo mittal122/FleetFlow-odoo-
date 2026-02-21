@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import dbConnect from '@/lib/db';
 import { User } from '@/lib/models/User';
 import { verifyToken, unauthorizedResponse } from '@/lib/auth';
-import { createUserSchema, updateUserSchema } from '@/lib/validation';
+import { createUserSchema } from '@/lib/validation';
 import { successResponse, errorResponse, validationErrorResponse, forbiddenResponse } from '@/lib/api-response';
 import { hashPassword } from '@/lib/auth';
 import { AuditLog } from '@/lib/models/AuditLog';

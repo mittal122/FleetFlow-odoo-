@@ -35,8 +35,10 @@ export const createVehicleSchema = z.object({
     make: z.string().min(1, 'Make is required'),
     model: z.string().min(1, 'Model is required'),
     year: z.number().int().min(1900).max(new Date().getFullYear() + 1),
+    vehicleType: z.enum(['truck', 'van', 'car', 'bus', 'trailer']).default('truck'),
     status: z.enum(['active', 'maintenance', 'retired']).default('active'),
     mileage: z.number().min(0).default(0),
+    maxLoadCapacity: z.number().min(0).default(0),
     assignedDriver: z.string().optional(),
 });
 
@@ -47,6 +49,8 @@ export const createTripSchema = z.object({
     origin: z.string().min(1, 'Origin is required'),
     destination: z.string().min(1, 'Destination is required'),
     distance: z.number().min(0).optional(),
+    cargoWeight: z.number().min(0).optional(),
+    estimatedFuelCost: z.number().min(0).optional(),
     scheduledDate: z.string().optional(),
     status: z.enum(['scheduled', 'in_progress', 'completed', 'cancelled']).default('scheduled'),
 });

@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import dbConnect from '@/lib/db';
-import { User } from '@/lib/models/User';
 import { Vehicle } from '@/lib/models/Vehicle';
 import { Trip } from '@/lib/models/Trip';
 import { Maintenance } from '@/lib/models/Maintenance';
@@ -15,22 +14,29 @@ export async function GET(request: NextRequest) {
         verifyToken(token);
         await dbConnect();
 
-        const [totalUsers, totalVehicles, totalTrips, maintenanceOverdue] = await Promise.all([
-            User.countDocuments(),
+        const [
+            totalVehicles,
+            activeFleet,
+            maintenanceAlerts,
+            pendingCargo,
+        ] = await Promise.all([
             Vehicle.countDocuments(),
-            Trip.countDocuments(),
-            Maintenance.countDocuments({
-                status: { $in: ['scheduled', 'in_progress'] },
-                scheduledDate: { $lt: new Date() },
-            }),
+            Vehicle.countDocuments({ status: 'active' }),
+            Vehicle.countDocuments({ status: 'maintenance' }),
+            Trip.countDocuments({ status: 'scheduled' }),
         ]);
+
+        const utilizationRate = totalVehicles > 0
+            ? Math.round((activeFleet / totalVehicles) * 100)
+            : 0;
 
         return NextResponse.json(
             successResponse({
-                totalUsers,
+                activeFleet,
+                maintenanceAlerts,
+                utilizationRate,
+                pendingCargo,
                 totalVehicles,
-                totalTrips,
-                maintenanceOverdue,
             })
         );
     } catch (error) {
