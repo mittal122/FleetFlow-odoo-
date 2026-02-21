@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "skills": {
+    "fullstack-guardian": {
+      "source": "jeffallan/claude-skills",
+      "sourceType": "github",
+      "computedHash": "941fc8cb57c721e3d6e971310aaf78fcdf78dcfe925d05fe0bb941df37d4de7c"
+    }
+  }
+}
