@@ -8,6 +8,10 @@ export interface IUser extends Document {
     phone?: string;
     status: 'active' | 'inactive' | 'suspended';
     lastLogin?: Date;
+    licenseNumber?: string;
+    licenseExpiry?: Date;
+    safetyScore?: number;
+    complaints?: number;
     createdAt: Date;
     updatedAt: Date;
 }
@@ -29,6 +33,10 @@ const userSchema = new Schema<IUser>(
             default: 'active',
         },
         lastLogin: { type: Date },
+        licenseNumber: { type: String, trim: true },
+        licenseExpiry: { type: Date },
+        safetyScore: { type: Number, min: 0, max: 100, default: 100 },
+        complaints: { type: Number, default: 0 },
     },
     { timestamps: true }
 );

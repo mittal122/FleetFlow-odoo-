@@ -111,6 +111,32 @@ export default function LoginPage() {
               Register
             </Link>
           </div>
+
+          {/* Demo Credentials */}
+          <div className="mt-6 border-t pt-4">
+            <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-3 text-center">Demo Credentials</p>
+            <div className="grid grid-cols-1 gap-1.5 text-xs">
+              {[
+                { role: 'Admin', email: 'zeel@gmail.com', pass: 'zeel1985' },
+                { role: 'Dispatcher', email: 'dispatcher@gmail.com', pass: 'dispatcher' },
+                { role: 'Driver', email: 'driver@gmail.com', pass: 'driver1985' },
+                { role: 'Mechanic', email: 'mechanic@gmail.com', pass: 'mechanic' },
+                { role: 'Accountant', email: 'accountant@gmail.com', pass: 'accountant' },
+                { role: 'Viewer', email: 'viewer@gmail.com', pass: 'viewer1985' },
+              ].map((cred) => (
+                <button
+                  key={cred.role}
+                  type="button"
+                  className="flex items-center justify-between px-3 py-2 rounded-md bg-slate-50 hover:bg-slate-100 transition-colors text-left group"
+                  onClick={() => { setEmail(cred.email); setPassword(cred.pass); }}
+                >
+                  <span className="font-medium text-slate-700">{cred.role}</span>
+                  <span className="text-slate-400 group-hover:text-slate-600">{cred.email}</span>
+                </button>
+              ))}
+            </div>
+            <p className="text-[10px] text-slate-400 text-center mt-2">Click a role to auto-fill credentials</p>
+          </div>
         </CardContent>
       </Card>
     </div>

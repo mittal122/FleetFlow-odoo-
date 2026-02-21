@@ -65,3 +65,13 @@ export const createMaintenanceSchema = z.object({
     cost: z.number().min(0).optional(),
     mechanic: z.string().optional(),
 });
+
+// Expense schemas
+export const createExpenseSchema = z.object({
+    trip: z.string().min(1, 'Trip is required'),
+    driver: z.string().min(1, 'Driver is required'),
+    vehicle: z.string().optional(),
+    fuelCost: z.number().min(0, 'Fuel cost must be positive'),
+    miscExpenses: z.number().min(0).default(0),
+    notes: z.string().optional(),
+});
