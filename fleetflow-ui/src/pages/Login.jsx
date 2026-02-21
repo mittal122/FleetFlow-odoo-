@@ -44,27 +44,36 @@ export default function Login() {
 
         <form onSubmit={handleSubmit}>
           {isRegister && (
-            <input
-              placeholder="Full Name"
-              value={form.name}
-              onChange={(e) => setForm({ ...form, name: e.target.value })}
-            />
+            <div className="form-group">
+              <label>Full Name</label>
+              <input
+                placeholder="e.g. John Doe"
+                value={form.name}
+                onChange={(e) => setForm({ ...form, name: e.target.value })}
+              />
+            </div>
           )}
-          <input
-            type="email"
-            placeholder="Email"
-            value={form.email}
-            onChange={(e) => setForm({ ...form, email: e.target.value })}
-            required
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            value={form.password}
-            onChange={(e) => setForm({ ...form, password: e.target.value })}
-            required
-            minLength={6}
-          />
+          <div className="form-group">
+            <label>Email Address</label>
+            <input
+              type="email"
+              placeholder="e.g. admin@fleetflow.io"
+              value={form.email}
+              onChange={(e) => setForm({ ...form, email: e.target.value })}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label>Password</label>
+            <input
+              type="password"
+              placeholder="Min 6 characters"
+              value={form.password}
+              onChange={(e) => setForm({ ...form, password: e.target.value })}
+              required
+              minLength={6}
+            />
+          </div>
           <button type="submit" disabled={loading}>
             {loading ? "Please wait..." : isRegister ? "Register" : "Login"}
           </button>

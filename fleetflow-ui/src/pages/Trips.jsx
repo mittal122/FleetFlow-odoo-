@@ -49,13 +49,16 @@ export default function Trips() {
 
       <div className="card">
         <div className="form-row">
-          <select value={filter} onChange={(e) => setFilter(e.target.value)}>
-            <option value="">All Trips</option>
+          <div className="form-group">
+            <label>Filter by Status</label>
+            <select value={filter} onChange={(e) => setFilter(e.target.value)}>
+              <option value="">All Trips</option>
             <option value="DISPATCHED">Dispatched</option>
             <option value="COMPLETED">Completed</option>
             <option value="CANCELLED">Cancelled</option>
-            <option value="DRAFT">Draft</option>
-          </select>
+              <option value="DRAFT">Draft</option>
+            </select>
+          </div>
           <span style={{ color: "#94a3b8" }}>{trips.length} trips</span>
         </div>
       </div>

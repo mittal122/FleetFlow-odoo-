@@ -37,6 +37,9 @@ app.get("/api/health", (req, res) => {
   res.json({ status: "FleetFlow running", timestamp: new Date() });
 });
 
+// Export app for testing
+export { app };
+
 app.listen(PORT, () => {
   console.log(`FleetFlow running on port ${PORT}`);
 });

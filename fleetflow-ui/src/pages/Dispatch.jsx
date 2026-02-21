@@ -66,43 +66,55 @@ export default function Dispatch() {
       <div className="card">
         <h3>Dispatch New Trip</h3>
         <div className="form-row">
-          <select
-            value={form.vehicleId}
-            onChange={(e) => setForm({ ...form, vehicleId: e.target.value })}
-          >
-            <option value="">Select Vehicle</option>
-            {vehicles.map((v) => (
-              <option key={v.id} value={v.id}>
-                {v.name} ({v.licensePlate}) — Cap: {v.maxCapacity}kg
-              </option>
-            ))}
-          </select>
+          <div className="form-group">
+            <label>Vehicle</label>
+            <select
+              value={form.vehicleId}
+              onChange={(e) => setForm({ ...form, vehicleId: e.target.value })}
+            >
+              <option value="">-- Select Vehicle --</option>
+              {vehicles.map((v) => (
+                <option key={v.id} value={v.id}>
+                  {v.name} ({v.licensePlate}) — Cap: {v.maxCapacity}kg
+                </option>
+              ))}
+            </select>
+          </div>
 
-          <select
-            value={form.driverId}
-            onChange={(e) => setForm({ ...form, driverId: e.target.value })}
-          >
-            <option value="">Select Driver</option>
-            {drivers.map((d) => (
-              <option key={d.id} value={d.id}>
-                {d.name}
-              </option>
-            ))}
-          </select>
+          <div className="form-group">
+            <label>Driver</label>
+            <select
+              value={form.driverId}
+              onChange={(e) => setForm({ ...form, driverId: e.target.value })}
+            >
+              <option value="">-- Select Driver --</option>
+              {drivers.map((d) => (
+                <option key={d.id} value={d.id}>
+                  {d.name}
+                </option>
+              ))}
+            </select>
+          </div>
 
-          <input
-            placeholder="Cargo Weight (kg)"
-            type="number"
-            value={form.cargoWeight}
-            onChange={(e) => setForm({ ...form, cargoWeight: e.target.value })}
-          />
+          <div className="form-group">
+            <label>Cargo Weight (kg)</label>
+            <input
+              placeholder="e.g. 3000"
+              type="number"
+              value={form.cargoWeight}
+              onChange={(e) => setForm({ ...form, cargoWeight: e.target.value })}
+            />
+          </div>
 
-          <input
-            placeholder="Start Odometer"
-            type="number"
-            value={form.startOdo}
-            onChange={(e) => setForm({ ...form, startOdo: e.target.value })}
-          />
+          <div className="form-group">
+            <label>Start Odometer (km)</label>
+            <input
+              placeholder="e.g. 12000"
+              type="number"
+              value={form.startOdo}
+              onChange={(e) => setForm({ ...form, startOdo: e.target.value })}
+            />
+          </div>
 
           <button onClick={dispatchTrip}>Dispatch Trip</button>
         </div>
@@ -111,23 +123,29 @@ export default function Dispatch() {
       <div className="card">
         <h3>Complete Trip</h3>
         <div className="form-row">
-          <input
-            placeholder="Trip ID"
-            type="number"
-            value={completeForm.tripId}
-            onChange={(e) =>
-              setCompleteForm({ ...completeForm, tripId: e.target.value })
-            }
-          />
-          <input
-            placeholder="End Odometer"
-            type="number"
-            value={completeForm.endOdo}
-            onChange={(e) =>
-              setCompleteForm({ ...completeForm, endOdo: e.target.value })
-            }
-          />
-          <button onClick={completeTrip}>Complete</button>
+          <div className="form-group">
+            <label>Trip ID</label>
+            <input
+              placeholder="e.g. 1"
+              type="number"
+              value={completeForm.tripId}
+              onChange={(e) =>
+                setCompleteForm({ ...completeForm, tripId: e.target.value })
+              }
+            />
+          </div>
+          <div className="form-group">
+            <label>End Odometer (km)</label>
+            <input
+              placeholder="e.g. 12450"
+              type="number"
+              value={completeForm.endOdo}
+              onChange={(e) =>
+                setCompleteForm({ ...completeForm, endOdo: e.target.value })
+              }
+            />
+          </div>
+          <button onClick={completeTrip}>Complete Trip</button>
         </div>
       </div>
     </div>

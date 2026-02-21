@@ -72,12 +72,18 @@ export default function Maintenance() {
       <div className="card">
         <h3>Log Maintenance</h3>
         <div className="form-row">
-          <input placeholder="Vehicle ID" type="number" min="1" required
-            value={form.vehicleId}
-            onChange={(e) => setForm({ ...form, vehicleId: e.target.value })} />
-          <input placeholder="Cost (₹)" type="number" min="1" required
-            value={form.cost}
-            onChange={(e) => setForm({ ...form, cost: e.target.value })} />
+          <div className="form-group">
+            <label>Vehicle ID</label>
+            <input placeholder="e.g. 1" type="number" min="1" required
+              value={form.vehicleId}
+              onChange={(e) => setForm({ ...form, vehicleId: e.target.value })} />
+          </div>
+          <div className="form-group">
+            <label>Maintenance Cost (₹)</label>
+            <input placeholder="e.g. 1200" type="number" min="1" required
+              value={form.cost}
+              onChange={(e) => setForm({ ...form, cost: e.target.value })} />
+          </div>
           <button onClick={logMaintenance}>Log Maintenance</button>
         </div>
       </div>
@@ -85,13 +91,19 @@ export default function Maintenance() {
       <div className="card">
         <h3>Complete Maintenance</h3>
         <div className="form-row">
-          <input placeholder="Vehicle ID" type="number" min="1" required
-            value={completeForm.vehicleId}
-            onChange={(e) => setCompleteForm({ ...completeForm, vehicleId: e.target.value })} />
-          <input placeholder="New Odometer (optional)" type="number" min="0"
-            value={completeForm.newOdometer}
-            onChange={(e) => setCompleteForm({ ...completeForm, newOdometer: e.target.value })} />
-          <button onClick={completeMaintenance}>Complete</button>
+          <div className="form-group">
+            <label>Vehicle ID</label>
+            <input placeholder="e.g. 1" type="number" min="1" required
+              value={completeForm.vehicleId}
+              onChange={(e) => setCompleteForm({ ...completeForm, vehicleId: e.target.value })} />
+          </div>
+          <div className="form-group">
+            <label>New Odometer (optional)</label>
+            <input placeholder="e.g. 13000" type="number" min="0"
+              value={completeForm.newOdometer}
+              onChange={(e) => setCompleteForm({ ...completeForm, newOdometer: e.target.value })} />
+          </div>
+          <button onClick={completeMaintenance}>Complete Maintenance</button>
         </div>
       </div>
 

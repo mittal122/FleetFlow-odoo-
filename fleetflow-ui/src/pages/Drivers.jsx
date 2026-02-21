@@ -47,17 +47,22 @@ export default function Drivers() {
       <div className="card">
         <h3>Add Driver</h3>
         <div className="form-row">
-          <input
-            placeholder="Name"
-            value={form.name}
-            onChange={(e) => setForm({ ...form, name: e.target.value })}
-          />
-          <input
-            type="date"
-            placeholder="License Expiry"
-            value={form.licenseExpiry}
-            onChange={(e) => setForm({ ...form, licenseExpiry: e.target.value })}
-          />
+          <div className="form-group">
+            <label>Driver Name</label>
+            <input
+              placeholder="e.g. Carlos Mendez"
+              value={form.name}
+              onChange={(e) => setForm({ ...form, name: e.target.value })}
+            />
+          </div>
+          <div className="form-group">
+            <label>License Expiry Date</label>
+            <input
+              type="date"
+              value={form.licenseExpiry}
+              onChange={(e) => setForm({ ...form, licenseExpiry: e.target.value })}
+            />
+          </div>
           <button onClick={createDriver}>Add Driver</button>
         </div>
       </div>

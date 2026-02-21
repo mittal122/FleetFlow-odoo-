@@ -69,27 +69,39 @@ export default function Expenses() {
       <div className="card">
         <h3>Log Fuel Expense</h3>
         <div className="form-row">
-          <input placeholder="Vehicle ID" type="number" min="1" required
-            value={form.vehicleId}
-            onChange={(e) => setForm({ ...form, vehicleId: e.target.value })} />
-          <input placeholder="Liters" type="number" min="0.1" step="0.1" required
-            value={form.liters}
-            onChange={(e) => setForm({ ...form, liters: e.target.value })} />
-          <input placeholder="Cost (₹)" type="number" min="1" required
-            value={form.cost}
-            onChange={(e) => setForm({ ...form, cost: e.target.value })} />
-          <button onClick={logFuel}>Log Expense</button>
+          <div className="form-group">
+            <label>Vehicle ID</label>
+            <input placeholder="e.g. 1" type="number" min="1" required
+              value={form.vehicleId}
+              onChange={(e) => setForm({ ...form, vehicleId: e.target.value })} />
+          </div>
+          <div className="form-group">
+            <label>Fuel Liters</label>
+            <input placeholder="e.g. 60" type="number" min="0.1" step="0.1" required
+              value={form.liters}
+              onChange={(e) => setForm({ ...form, liters: e.target.value })} />
+          </div>
+          <div className="form-group">
+            <label>Cost (₹)</label>
+            <input placeholder="e.g. 120" type="number" min="1" required
+              value={form.cost}
+              onChange={(e) => setForm({ ...form, cost: e.target.value })} />
+          </div>
+          <button onClick={logFuel}>Log Fuel Expense</button>
         </div>
       </div>
 
       <div className="card">
         <h3>Lookup Vehicle Financials</h3>
         <div className="form-row">
-          <input placeholder="Vehicle ID" type="number" min="1"
-            value={lookupId}
-            onChange={(e) => setLookupId(e.target.value)} />
-          <button onClick={getOperationalCost}>Get Cost</button>
-          <button onClick={getEfficiency}>Get Efficiency</button>
+          <div className="form-group">
+            <label>Vehicle ID</label>
+            <input placeholder="e.g. 1" type="number" min="1"
+              value={lookupId}
+              onChange={(e) => setLookupId(e.target.value)} />
+          </div>
+          <button onClick={getOperationalCost}>Get Total Cost</button>
+          <button onClick={getEfficiency}>Get Fuel Efficiency</button>
         </div>
         {costResult && (
           <p style={{marginTop:10}}>Total Operational Cost: ₹ {costResult.totalOperationalCost.toLocaleString()}</p>

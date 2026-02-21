@@ -51,23 +51,32 @@ export default function Vehicles() {
       <div className="card">
         <h3>Add Vehicle</h3>
         <div className="form-row">
-          <input
-            placeholder="Name"
-            value={form.name}
-            onChange={(e) => setForm({ ...form, name: e.target.value })}
-          />
-          <input
-            placeholder="License Plate"
-            value={form.licensePlate}
-            onChange={(e) => setForm({ ...form, licensePlate: e.target.value })}
-          />
-          <input
-            placeholder="Max Capacity (kg)"
-            type="number"
-            value={form.maxCapacity}
-            onChange={(e) => setForm({ ...form, maxCapacity: e.target.value })}
-          />
-          <button onClick={createVehicle}>Create</button>
+          <div className="form-group">
+            <label>Vehicle Name</label>
+            <input
+              placeholder="e.g. Truck Alpha"
+              value={form.name}
+              onChange={(e) => setForm({ ...form, name: e.target.value })}
+            />
+          </div>
+          <div className="form-group">
+            <label>License Plate</label>
+            <input
+              placeholder="e.g. FL-1001"
+              value={form.licensePlate}
+              onChange={(e) => setForm({ ...form, licensePlate: e.target.value })}
+            />
+          </div>
+          <div className="form-group">
+            <label>Max Capacity (kg)</label>
+            <input
+              placeholder="e.g. 5000"
+              type="number"
+              value={form.maxCapacity}
+              onChange={(e) => setForm({ ...form, maxCapacity: e.target.value })}
+            />
+          </div>
+          <button onClick={createVehicle}>Create Vehicle</button>
         </div>
       </div>
 
