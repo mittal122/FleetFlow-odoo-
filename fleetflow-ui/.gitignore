@@ -1,0 +1,24 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Dependency directories
+node_modules/
+
+# Build outputs
+dist/
+
+# Vite/React
+.vite/
+.vite-temp/
+
+# Local env
+.env
+
+# Misc
+.DS_Store

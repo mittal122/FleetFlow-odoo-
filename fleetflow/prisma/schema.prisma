@@ -1,0 +1,98 @@
+// FleetFlow Prisma Schema
+// Modular Fleet & Logistics Management System
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Vehicle {
+  id           Int             @id @default(autoincrement())
+  name         String
+  licensePlate String          @unique
+  maxCapacity  Float
+  odometer     Float           @default(0)
+  status       VehicleStatus   @default(AVAILABLE)
+  createdAt    DateTime        @default(now())
+  trips        Trip[]
+  expenses     Expense[]
+  maintenance  Maintenance[]
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  name      String
+  role      Role     @default(DISPATCHER)
+  createdAt DateTime @default(now())
+}
+
+enum Role {
+  ADMIN
+  DISPATCHER
+  VIEWER
+}
+
+model Driver {
+  id            Int          @id @default(autoincrement())
+  name          String
+  licenseExpiry DateTime
+  status        DriverStatus @default(AVAILABLE)
+  createdAt     DateTime     @default(now())
+  trips         Trip[]
+}
+
+model Trip {
+  id          Int        @id @default(autoincrement())
+  vehicleId   Int
+  driverId    Int
+  cargoWeight Float
+  status      TripStatus @default(DRAFT)
+  startOdo    Float
+  endOdo      Float?
+  createdAt   DateTime   @default(now())
+  vehicle     Vehicle    @relation(fields: [vehicleId], references: [id])
+  driver      Driver     @relation(fields: [driverId], references: [id])
+}
+
+model Maintenance {
+  id        Int      @id @default(autoincrement())
+  vehicleId Int
+  cost      Float
+  date      DateTime @default(now())
+  vehicle   Vehicle  @relation(fields: [vehicleId], references: [id])
+}
+
+model Expense {
+  id         Int      @id @default(autoincrement())
+  vehicleId  Int
+  fuelLiters Float
+  cost       Float
+  date       DateTime @default(now())
+  vehicle    Vehicle  @relation(fields: [vehicleId], references: [id])
+}
+
+enum VehicleStatus {
+  AVAILABLE
+  ON_TRIP
+  IN_SHOP
+  RETIRED
+}
+
+enum DriverStatus {
+  AVAILABLE
+  ON_DUTY
+  SUSPENDED
+}
+
+enum TripStatus {
+  DRAFT
+  DISPATCHED
+  COMPLETED
+  CANCELLED
+}
