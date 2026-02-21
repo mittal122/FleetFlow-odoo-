@@ -4,12 +4,6 @@ FleetFlow is a full-stack fleet management application that helps logistics comp
 
 ---
 
-**Repository Migration Notice**
-
-This project was migrated from [Zeel190805/FleetFlow-a-Modular-Fleet-Logistics-Management-System](https://github.com/Zeel190805/FleetFlow-a-Modular-Fleet-Logistics-Management-System) to [mittal122/FleetFlow-odoo-](https://github.com/mittal122/FleetFlow-odoo-).
-
-Please use the new repository for all future updates and contributions.
-
 
 ## Why FleetFlow?
 
