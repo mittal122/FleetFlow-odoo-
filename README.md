@@ -147,4 +147,4 @@ npm test
 Contributions are welcome. Please open an issue first to discuss major changes.
 
 ## License
-License is not clearly defined at repository root yet. Add a LICENSE file before production use.
+A root `LICENSE` file is not present yet. Add one before production use.
