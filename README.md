@@ -39,7 +39,7 @@ The separate `fleetflow/` module uses Express + Prisma + PostgreSQL.
 ```mermaid
 flowchart TD
     A[User signs in] --> B[JWT cookie authentication]
-    B --> C[Dashboard pages by role]
+    B --> C[Dashboard navigation by role]
     C --> D[Create or view operational data]
     D --> D1[Vehicles]
     D --> D2[Trips]
@@ -122,7 +122,7 @@ flowchart LR
    MONGODB_URL=mongodb://localhost:27017/fleetflow
    JWT_SECRET=change-this-secret
    ```
-   If you run MongoDB in Docker, use a host value that matches your setup (for example `host.docker.internal` in some environments).
+   If you run MongoDB in Docker Desktop (Windows/macOS), you may need `host.docker.internal` instead of `localhost`.
 4. Start development server:
    ```bash
    npm run dev
@@ -132,7 +132,7 @@ flowchart LR
 ## Usage notes
 - Register a user or sign in through `/login`.
 - API routes are under `/api/*`.
-- A seed endpoint exists at `POST /api/seed` for demo users.
+- A seed endpoint exists at `POST /api/seed` to create demo users for all roles (admin, dispatcher, driver, mechanic, accountant, viewer).
 
 ## Optional: run tests in the Express module
 If you also want to run the `fleetflow/` module tests:
