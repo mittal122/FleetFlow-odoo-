@@ -32,7 +32,10 @@ Daily fleet operations involve multiple moving parts (vehicle availability, trip
 ### Solution summary
 FleetFlow combines dashboard pages with API routes for core workflows: authentication, role-based access, vehicle and trip records, maintenance records, expense entries, analytics endpoints, and audit logs.
 
-## Project flow diagram
+## Project flow diagram (root Next.js app)
+This flow describes the root `app/` + `lib/` implementation.  
+The separate `fleetflow/` module uses Express + Prisma + PostgreSQL.
+
 ```mermaid
 flowchart TD
     A[User signs in] --> B[JWT cookie authentication]
@@ -147,4 +150,4 @@ npm test
 Contributions are welcome. Please open an issue first to discuss major changes.
 
 ## License
-A root `LICENSE` file is not present yet. Add one before production use.
+No root `LICENSE` file was found in this repository at the time of writing. Add one before production use.
