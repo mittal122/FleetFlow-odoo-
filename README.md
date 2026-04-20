@@ -123,8 +123,8 @@ flowchart LR
    JWT_SECRET=change-this-secret
    ```
    Use `localhost` when running `npm run dev` on your host machine.  
-   If the Next.js app runs in Docker: use `host.docker.internal` on Docker Desktop (macOS/Windows).  
-   On Linux, use your host bridge IP (commonly `172.17.0.1`) or configure host networking when appropriate.
+   If the Next.js app runs in Docker, use a host value supported by your Docker setup (often `host.docker.internal`),  
+   or use your host bridge IP on Linux (commonly `172.17.0.1`).
 4. Start development server:
    ```bash
    npm run dev
@@ -140,6 +140,18 @@ flowchart LR
   ```
   Expected response includes a `results` array with per-role status such as `created` or `already exists`.  
   Re-running the endpoint is safe for demos because existing users are skipped.
+  ```json
+  {
+    "success": true,
+    "message": "Seed complete",
+    "data": {
+      "results": [
+        "admin: created",
+        "dispatcher: already exists"
+      ]
+    }
+  }
+  ```
 
 ## Optional: run tests in the Express module
 If you also want to run the `fleetflow/` module tests:
