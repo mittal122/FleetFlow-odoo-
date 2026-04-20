@@ -123,7 +123,7 @@ flowchart LR
    JWT_SECRET=change-this-secret
    ```
    Use `localhost` when running `npm run dev` on your host machine.  
-   Use `host.docker.internal` only if the Next.js app itself runs inside a Docker container and must reach MongoDB on the host.
+   If the Next.js app runs in Docker: use `host.docker.internal` on Docker Desktop (macOS/Windows), or use your host IP/container networking on Linux.
 4. Start development server:
    ```bash
    npm run dev
@@ -155,4 +155,4 @@ npm test
 Contributions are welcome. Please open an issue first to discuss major changes.
 
 ## License
-No root `LICENSE` file was found in this repository at the time of writing. Add one before production use.
+Please ensure an appropriate `LICENSE` file is in place before production use.
