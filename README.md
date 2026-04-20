@@ -124,7 +124,8 @@ flowchart LR
    ```
    Use `localhost` when running `npm run dev` on your host machine.  
    If the Next.js app runs in Docker: `host.docker.internal` is commonly available on Docker Desktop for macOS  
-   (and many Windows setups), while Linux typically uses the host bridge IP (commonly `172.17.0.1`) or host IP.
+   (and many Windows setups), but it may not work on all systems. Linux typically uses the host bridge IP  
+   (commonly `172.17.0.1`) or the actual host IP/custom Docker networking.
 4. Start development server:
    ```bash
    npm run dev
@@ -139,7 +140,7 @@ flowchart LR
   curl -X POST http://localhost:3000/api/seed
   ```
   Expected response includes a `results` array with per-role status such as `created` or `already exists`.  
-  Re-running the endpoint is safe for demos because existing users are skipped.
+  This users-only seed endpoint checks existing emails and skips already-created users on re-run.
   ```json
   {
     "success": true,
