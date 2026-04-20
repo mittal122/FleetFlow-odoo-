@@ -122,7 +122,8 @@ flowchart LR
    MONGODB_URL=mongodb://localhost:27017/fleetflow
    JWT_SECRET=change-this-secret
    ```
-   If you run MongoDB in Docker Desktop (Windows/macOS), you may need `host.docker.internal` instead of `localhost`.
+   Use `localhost` when running `npm run dev` on your host machine.  
+   Use `host.docker.internal` only if the Next.js app itself runs inside a Docker container and must reach MongoDB on the host.
 4. Start development server:
    ```bash
    npm run dev
@@ -133,6 +134,9 @@ flowchart LR
 - Register a user or sign in through `/login`.
 - API routes are under `/api/*`.
 - A seed endpoint exists at `POST /api/seed` to create demo users for all roles (admin, dispatcher, driver, mechanic, accountant, viewer).
+  ```bash
+  curl -X POST http://localhost:3000/api/seed
+  ```
 
 ## Optional: run tests in the Express module
 If you also want to run the `fleetflow/` module tests:
