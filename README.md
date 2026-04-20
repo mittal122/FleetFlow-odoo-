@@ -123,8 +123,8 @@ flowchart LR
    JWT_SECRET=change-this-secret
    ```
    Use `localhost` when running `npm run dev` on your host machine.  
-   If the Next.js app runs in Docker, use a host value supported by your Docker setup (often `host.docker.internal`),  
-   or use your host bridge IP on Linux (commonly `172.17.0.1`).
+   If the Next.js app runs in Docker: `host.docker.internal` is commonly available on Docker Desktop for macOS  
+   (and many Windows setups), while Linux typically uses the host bridge IP (commonly `172.17.0.1`) or host IP.
 4. Start development server:
    ```bash
    npm run dev
