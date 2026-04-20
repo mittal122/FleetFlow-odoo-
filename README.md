@@ -1,4 +1,4 @@
-# FleetFlow (mittal122/FleetFlow-odoo-)
+# FleetFlow
 
 FleetFlow is a fleet operations project for managing vehicles, trips, maintenance, expenses, users, and audit logs from one dashboard.
 
@@ -119,9 +119,10 @@ flowchart LR
    ```
 3. Create environment file (example values):
    ```bash
-   MONGODB_URL=mongodb://127.0.0.1:27017/fleetflow
+   MONGODB_URL=mongodb://localhost:27017/fleetflow
    JWT_SECRET=change-this-secret
    ```
+   If you run MongoDB in Docker, use a host value that matches your setup (for example `host.docker.internal` in some environments).
 4. Start development server:
    ```bash
    npm run dev
