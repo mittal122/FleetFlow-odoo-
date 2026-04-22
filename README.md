@@ -1,327 +1,176 @@
-# FleetFlow — Modular Fleet & Logistics Management System
+# FleetFlow
 
-FleetFlow is a full-stack fleet management application that helps logistics companies track vehicles, manage drivers, dispatch trips, log maintenance, monitor fuel expenses, and analyze fleet performance — all from a single dashboard.
+FleetFlow is a fleet operations project for managing vehicles, trips, maintenance, expenses, users, and audit logs from one dashboard.
 
----
+## Overview
+This repository currently contains:
+- A **Next.js + TypeScript** application (root `app/`, `lib/`, `components/`) with API routes and dashboard UI.
+- A separate **Express + Prisma** backend in `fleetflow/` and a **Vite React** UI in `fleetflow-ui/`.
 
+The README below focuses on what is actually present in this repository today.
 
-## Why FleetFlow?
+## Why this project was made (motivation)
+Fleet and logistics teams often run operations across spreadsheets, calls, and disconnected tools. That creates common issues like delayed dispatching, weak cost visibility, and missed maintenance tracking.
 
-Managing a fleet of vehicles involves juggling many moving parts: which truck is available, which driver is on duty, when maintenance is due, how much fuel is being consumed. Without a centralized system, dispatchers rely on spreadsheets and phone calls, leading to:
+FleetFlow was made to provide one place to:
+- manage vehicles and trips,
+- control access by role,
+- track maintenance and trip expenses,
+- and keep an audit trail of operational actions.
 
-- **Double-dispatching** — accidentally assigning an unavailable vehicle or driver
-- **Missed maintenance** — vehicles breaking down because service wasn't tracked
-- **Cost blind spots** — no visibility into per-vehicle fuel efficiency or total operating cost
-- **No audit trail** — no history of who drove what, when, and how
+## Who this project helps
+FleetFlow is useful for:
+- **Fleet owners and managers**: track operational status and utilization quickly.
+- **Dispatchers**: create and monitor trips with vehicle/driver context.
+- **Operations teams (maintenance/accounting)**: track service records and trip expenses.
+- **Developers/startups**: use a practical codebase for building fleet-management workflows.
 
-FleetFlow solves these problems with **state-driven business logic** that automatically enforces rules (e.g., a vehicle on a trip cannot be dispatched again) and provides real-time analytics.
+## What problem this project solves
+### Problem statement
+Daily fleet operations involve multiple moving parts (vehicle availability, trip assignment, maintenance timing, and cost tracking). Without a centralized workflow, teams can lose visibility and make avoidable coordination errors.
 
----
+### Solution summary
+FleetFlow combines dashboard pages with API routes for core workflows: authentication, role-based access, vehicle and trip records, maintenance records, expense entries, analytics endpoints, and audit logs.
 
-## Features
+## Project flow diagram (root Next.js app)
+This flow describes the root `app/` + `lib/` implementation.  
+The separate `fleetflow/` module uses Express + Prisma + PostgreSQL.
 
-| Module | What it does |
-|--------|-------------|
-| **Authentication** | JWT-based login/register with 3 roles: Admin, Dispatcher, Viewer |
-| **Vehicle Registry** | Add, update, retire vehicles. Tracks odometer and status |
-| **Driver Management** | Add drivers, check license compliance, suspend/reinstate, track performance |
-| **Trip Dispatch** | Dispatch trips with cargo validation, complete or cancel with automatic resource release |
-| **Maintenance** | Log service → vehicle auto-blocked (IN_SHOP). Complete to release |
-| **Fuel & Expenses** | Log fuel costs, calculate per-vehicle operational cost and km/L efficiency |
-| **Dashboard** | Fleet-wide KPIs: total vehicles, active trips, maintenance alerts, utilization rate |
-| **Analytics** | Per-vehicle report with charts (bar + pie), downloadable CSV export |
-
----
-
-## Tech Stack
-
-| Layer | Technology |
-|-------|-----------|
-| Backend API | Node.js + Express 5 (ES Modules) |
-| Database | PostgreSQL 15 via Prisma ORM v5 |
-| Frontend | React 19 + Vite 7 |
-| Charts | Recharts |
-| Auth | JWT + bcrypt |
-| Testing | Vitest + Supertest (90 tests) |
-| Deployment | Docker Compose + Nginx |
-
----
-
-## Project Structure
-
-```
-FleetFlow-odoo-/
-├── fleetflow/                  # Backend API
-│   ├── src/
-│   │   ├── server.js           # Express app entry point
-│   │   ├── config/db.js        # Prisma client
-│   │   ├── routes/             # Route handlers (thin wrappers)
-│   │   │   ├── auth.routes.js
-│   │   │   ├── vehicle.routes.js
-│   │   │   ├── driver.routes.js
-│   │   │   ├── dispatch.routes.js
-│   │   │   ├── maintenance.routes.js
-│   │   │   ├── expense.routes.js
-│   │   │   ├── dashboard.routes.js
-│   │   │   └── analytics.routes.js
-│   │   ├── services/           # Business logic
-│   │   │   ├── auth.service.js
-│   │   │   ├── vehicle.service.js
-│   │   │   ├── driver.service.js
-│   │   │   ├── dispatch.service.js
-│   │   │   ├── maintenance.service.js
-│   │   │   ├── expense.service.js
-│   │   │   ├── dashboard.service.js
-│   │   │   └── analytics.service.js
-│   │   └── utils/
-│   │       └── auth.middleware.js
-│   ├── prisma/
-│   │   ├── schema.prisma       # Database schema
-│   │   ├── seed.js             # Sample data
-│   │   └── migrations/
-│   ├── tests/                  # Vitest test suite
-│   │   ├── api-integration.test.js  # 46 end-to-end API tests
-│   │   ├── dispatch.test.js
-│   │   ├── maintenance.test.js
-│   │   ├── expense.test.js
-│   │   ├── auth.test.js
-│   │   └── vehicle-driver.test.js
-│   ├── Dockerfile
-│   └── package.json
-│
-├── fleetflow-ui/               # Frontend
-│   ├── src/
-│   │   ├── App.jsx             # Router + sidebar + auth guard
-│   │   ├── api/client.js       # Axios instance
-│   │   ├── components/
-│   │   │   ├── AuthContext.jsx  # JWT auth state
-│   │   │   ├── ErrorBoundary.jsx
-│   │   │   └── Loading.jsx
-│   │   └── pages/
-│   │       ├── Login.jsx
-│   │       ├── Dashboard.jsx
-│   │       ├── Vehicles.jsx
-│   │       ├── Drivers.jsx
-│   │       ├── Dispatch.jsx
-│   │       ├── Trips.jsx
-│   │       ├── Maintenance.jsx
-│   │       ├── Expenses.jsx
-│   │       └── Analytics.jsx
-│   ├── Dockerfile
-│   └── package.json
-│
-└── docker-compose.yml          # Full stack deployment
+```mermaid
+flowchart TD
+    A[User signs in] --> B[JWT cookie authentication]
+    B --> C[Dashboard navigation by role]
+    C --> D[Create or view operational data]
+    D --> D1[Vehicles]
+    D --> D2[Trips]
+    D --> D3[Maintenance]
+    D --> D4[Expenses]
+    D --> D5[Users and audit logs]
+    D1 --> E[(MongoDB via Mongoose)]
+    D2 --> E
+    D3 --> E
+    D4 --> E
+    D5 --> E
+    E --> F[Stats, analytics, and operational history]
 ```
 
----
+## Feature diagram
+```mermaid
+flowchart LR
+    R[FleetFlow Features]
 
-## Prerequisites
+    R --> A[Authentication & Access]
+    A --> A1[Register/Login APIs]
+    A --> A2[JWT cookie session]
+    A --> A3[Role-based dashboard navigation]
 
-- **Node.js** 18+ (recommended: 20)
-- **PostgreSQL** 15+ (or Docker)
-- **npm** 9+
+    R --> B[Fleet Operations]
+    B --> B1[Vehicle records]
+    B --> B2[Trip creation and tracking]
+    B --> B3[Maintenance scheduling/logging]
+    B --> B4[Trip expense entries]
 
----
+    R --> C[Visibility & Control]
+    C --> C1[Dashboard stats]
+    C --> C2[Performance/analytics endpoints]
+    C --> C3[Admin audit logs]
 
-## Getting Started
-
-### 1. Clone the repository
-
-```bash
-git clone https://github.com/mittal122/FleetFlow-odoo-.git
-cd FleetFlow-odoo-
+    R --> D[Repository Extras]
+    D --> D1[Legacy Express API in fleetflow/]
+    D --> D2[Legacy Vite UI in fleetflow-ui/]
+    D --> D3[Vitest tests under fleetflow/tests]
 ```
 
-### 2. Start PostgreSQL
+## Key features in current codebase
+- JWT authentication (`app/api/auth/*`) and protected API access.
+- Role model covering `admin`, `dispatcher`, `driver`, `mechanic`, `accountant`, and `viewer`.
+- Fleet modules via API routes:
+  - `app/api/vehicles/route.ts`
+  - `app/api/trips/route.ts`
+  - `app/api/maintenance/route.ts`
+  - `app/api/expenses/route.ts`
+  - `app/api/analytics/route.ts`
+  - `app/api/performance/route.ts`
+  - `app/api/dashboard/stats/route.ts`
+- Admin management and audit trails (`app/api/admin/*`).
+- Dashboard pages for vehicles, trips, maintenance, trip expenses, performance, analytics, users, and audit logs (`app/dashboard/*`).
 
-Using Docker (recommended):
+## Tech stack
+### Root app
+- Next.js (App Router)
+- React + TypeScript
+- Tailwind CSS + shadcn/ui components
+- MongoDB + Mongoose
+- JWT + bcryptjs
 
-```bash
-docker run -d --name fleetflow-pg \
-  -e POSTGRES_USER=postgres \
-  -e POSTGRES_PASSWORD=postgres \
-  -e POSTGRES_DB=fleetflow \
-  -p 5432:5432 \
-  postgres:15-alpine
-```
+### Additional modules in repository
+- `fleetflow/`: Node.js + Express + Prisma + PostgreSQL + Vitest
+- `fleetflow-ui/`: React + Vite + ESLint
 
-Or use an existing PostgreSQL instance and update the connection string in step 3.
+## Setup (root Next.js app)
+1. Clone repository:
+   ```bash
+   git clone https://github.com/mittal122/FleetFlow-odoo-.git
+   cd FleetFlow-odoo-
+   ```
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Create environment file (example values):
+   ```bash
+   MONGODB_URL=mongodb://localhost:27017/fleetflow
+   JWT_SECRET=change-this-secret
+   ```
+   Use a `MONGODB_URL` that matches your runtime:
+   - Host machine (`npm run dev` locally): `mongodb://localhost:27017/fleetflow`
+   - Docker Desktop setups (common, if supported): `mongodb://host.docker.internal:27017/fleetflow`
+   - Linux Docker setups (common): `mongodb://172.17.0.1:27017/fleetflow` or your host IP
+4. Start development server:
+   ```bash
+   npm run dev
+   ```
+5. Open: `http://localhost:3000`
 
-### 3. Set up the backend
+## Usage notes
+- Register a user or sign in through `/login`.
+- API routes are under `/api/*`.
+- Seed endpoint: `POST /api/seed`
+  - Creates demo users for all roles (admin, dispatcher, driver, mechanic, accountant, viewer).
+  - Role-specific capabilities differ by page/module, so some roles have narrower workflows than admin.
+  ```bash
+  curl -X POST http://localhost:3000/api/seed
+  ```
+  Expected response includes a `results` array with per-role status such as `created` or `already exists`.  
+  This users-only seed endpoint checks existing emails and skips already-created users on re-run.
+  ```json
+  {
+    "success": true,
+    "message": "Seed complete",
+    "data": {
+      "results": [
+        "admin: created",
+        "dispatcher: already exists"
+      ]
+    }
+  }
+  ```
 
-```bash
-cd fleetflow
-
-# Create environment file
-cp .env.example .env
-# Edit .env if your PostgreSQL credentials differ
-
-# Install dependencies
-npm install
-
-# Run database migrations
-npx prisma migrate deploy
-
-# Generate Prisma client
-npx prisma generate
-
-# Seed sample data (6 vehicles, 5 drivers, trips, expenses)
-npx prisma db seed
-```
-
-### 4. Start the backend
-
-```bash
-npm run dev
-# ✅ FleetFlow running on port 3000
-```
-
-### 5. Set up and start the frontend
-
-Open a **new terminal**:
-
-```bash
-cd fleetflow-ui
-
-# Install dependencies
-npm install
-
-# Start development server
-npm run dev
-# ✅ Vite ready at http://localhost:5173
-```
-
-### 6. Open the app
-
-Go to **http://localhost:5173** in your browser.
-
-Login with the seeded admin account:
-
-| Field | Value |
-|-------|-------|
-| Email | `admin@fleetflow.io` |
-| Password | `password123` |
-
----
-
-## How It Works
-
-### State Machine (Core Concept)
-
-FleetFlow is **state-driven**, not simple CRUD. Every entity has a status that controls what actions are allowed:
-
-```
-Vehicle:  AVAILABLE → ON_TRIP → AVAILABLE
-          AVAILABLE → IN_SHOP → AVAILABLE
-          AVAILABLE → RETIRED (permanent)
-
-Driver:   AVAILABLE → ON_DUTY → AVAILABLE
-          AVAILABLE → SUSPENDED → AVAILABLE
-
-Trip:     DISPATCHED → COMPLETED
-          DISPATCHED → CANCELLED
-```
-
-**Example workflow:**
-
-1. **Dispatch a trip** — System validates: Is the vehicle AVAILABLE? Is the cargo within capacity? Is the driver AVAILABLE with a valid license? If all pass, vehicle moves to `ON_TRIP` and driver to `ON_DUTY` **atomically** (in a single database transaction).
-
-2. **Complete the trip** — Vehicle returns to `AVAILABLE`, odometer updates, driver returns to `AVAILABLE`.
-
-3. **Log maintenance** — Vehicle automatically moves to `IN_SHOP`. It **cannot** be dispatched until maintenance is marked complete.
-
-4. **Track costs** — Every fuel fill-up and maintenance cost is recorded. Analytics calculates total cost and km/L efficiency per vehicle.
-
-### API Endpoints
-
-All endpoints require a JWT token (except auth and health):
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/api/auth/register` | Register new user |
-| POST | `/api/auth/login` | Login, get JWT token |
-| GET | `/api/vehicles` | List all vehicles |
-| POST | `/api/vehicles` | Create a vehicle |
-| PATCH | `/api/vehicles/:id/retire` | Retire a vehicle |
-| GET | `/api/drivers` | List all drivers |
-| POST | `/api/drivers` | Create a driver |
-| GET | `/api/drivers/compliance/:id` | Check driver compliance |
-| GET | `/api/drivers/performance/:id` | Get driver trip stats |
-| POST | `/api/trips/dispatch` | Dispatch a new trip |
-| POST | `/api/trips/complete` | Complete a trip |
-| POST | `/api/trips/cancel` | Cancel a trip |
-| GET | `/api/trips` | List trips (filter by status) |
-| POST | `/api/maintenance/log` | Log maintenance (auto-blocks vehicle) |
-| POST | `/api/maintenance/complete` | Release vehicle from maintenance |
-| GET | `/api/maintenance/history` | Maintenance history |
-| POST | `/api/expenses/fuel` | Log fuel expense |
-| GET | `/api/expenses/cost/:vehicleId` | Total operational cost |
-| GET | `/api/expenses/efficiency/:vehicleId` | Fuel efficiency (km/L) |
-| GET | `/api/dashboard/stats` | Fleet KPIs |
-| GET | `/api/analytics/fleet` | Per-vehicle analytics report |
-| GET | `/api/analytics/export/csv` | Download CSV report |
-| GET | `/api/health` | Health check (no auth) |
-
----
-
-## Running Tests
-
+## Optional: run tests in the Express module
+If you also want to run the `fleetflow/` module tests:
 ```bash
 cd fleetflow
+npm install
 npm test
 ```
 
-This runs **90 tests** across 6 test files:
+## Future improvements
+- Add a single, unified architecture path (root app vs legacy modules).
+- Add CI checks for README/Markdown and end-to-end smoke tests.
+- Add deployment-specific guides (local, Docker, and cloud) for each module.
 
-| Test File | Tests | Coverage |
-|-----------|-------|----------|
-| `api-integration.test.js` | 46 | Full API walkthrough — auth, vehicles, drivers, trips, maintenance, expenses, analytics |
-| `dispatch.test.js` | 13 | Trip dispatch/complete/cancel validation |
-| `maintenance.test.js` | 7 | Maintenance logging and vehicle blocking |
-| `expense.test.js` | 7 | Fuel logging, cost aggregation, efficiency calculation |
-| `auth.test.js` | 8 | Registration, login, password validation |
-| `vehicle-driver.test.js` | 9 | CRUD + compliance + performance |
-
-Read `tests/api-integration.test.js` as a **guided walkthrough** — each test is commented to explain what the application does and why.
-
----
-
-## Docker Deployment
-
-To run the full stack with Docker Compose:
-
-```bash
-# From the project root
-docker compose up --build
-```
-
-This starts:
-- **PostgreSQL** on port 5432
-- **Backend API** on port 3000
-- **Frontend (Nginx)** on port 8080
-
----
-
-## Seeded Accounts
-
-| Email | Password | Role |
-|-------|----------|------|
-| `admin@fleetflow.io` | `password123` | ADMIN |
-| `dispatch@fleetflow.io` | `password123` | DISPATCHER |
-| `viewer@fleetflow.io` | `password123` | VIEWER |
-
----
-
-## Environment Variables
-
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `DATABASE_URL` | `postgresql://postgres:postgres@localhost:5432/fleetflow` | PostgreSQL connection string |
-| `JWT_SECRET` | `fleetflow-secret-key-change-in-prod` | Secret for signing JWT tokens |
-| `PORT` | `3000` | Backend server port |
-
----
+## Contributing
+Contributions are welcome. Please open an issue first to discuss major changes.
 
 ## License
-
-ISC
+Please ensure an appropriate `LICENSE` file is in place before production use.
